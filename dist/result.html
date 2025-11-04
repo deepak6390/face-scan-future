@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Your Future Result</title>
+  <link href="style.css" rel="stylesheet">
+</head>
+<body class="bg-gray-900 text-white flex flex-col items-center justify-center h-screen text-center relative">
+
+  <h1 class="text-3xl font-bold mb-4">🔮 Scan Complete!</h1>
+  <p class="text-gray-400 mb-6">We have predicted your future...</p>
+
+  <!-- Video Container -->
+  <div id="videoContainer" class="w-full max-w-md aspect-video bg-gray-800 rounded-xl shadow-lg overflow-hidden mb-6 relative">
+    <video 
+      id="videoPlayer" 
+      class="w-full h-full" 
+      autoplay 
+      muted 
+      playsinline 
+      loop>
+    </video>
+
+    <!-- 🔊 Unmute Button -->
+    <button id="unmuteBtn"
+      class="absolute bottom-3 right-3 bg-green-500 hover:bg-green-600 text-white text-sm px-4 py-2 rounded-full shadow-lg hidden animate-pulse">
+      🔊 Tap to Unmute
+    </button>
+  </div>
+
+  <!-- Funny Future Text -->
+  <div id="resultBox" class="bg-gray-800 px-8 py-6 rounded-xl shadow-lg text-2xl font-semibold mb-6"></div>
+
+  <button onclick="window.location.href='index.html'" class="mt-2 bg-green-500 hover:bg-green-600 text-white py-2 px-6 rounded-full">
+    🔁 Scan Again
+  </button>
+
+  <script>
+    const results = [
+      "BETA JOH WOH WHI RAHO KUCH BANNA KI KOSIS NA KARO 👨‍💻🔥",
+      "BHAUT BCA WALA AAYA OR BHAUT CHALA GYE 😅",
+      "BUSINESS KARO CODING NAHI, JAHA HO WHI REAH JAO GA 💼",
+      "JISKA SAPNA DEKH RHA HAI WOH GHAR CHALAN NHI AAY GI ❤️",
+      "CHUTIYA KI TARAH HASNA BAND KAR 😂"
+    ];
+
+    const videos = [
+      "VIDEO-43.MP4",
+      "VIDEO-44.MP4",
+      "VIDEO-45.MP4",
+      "VIDEO-46.MP4",
+      "VIDEO-47.MP4"
+    ];
+
+    // Get a better random index (less repeat)
+    function getRandomIndex(max) {
+      return Math.floor(Math.random() * max);
+    }
+
+    // Shuffle arrays before picking one
+    function shuffleArray(arr) {
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      return arr;
+    }
+
+    shuffleArray(results);
+    shuffleArray(videos);
+
+    const randomIndex = getRandomIndex(results.length);
+    const video = document.getElementById('videoPlayer');
+    const unmuteBtn = document.getElementById('unmuteBtn');
+
+    document.getElementById('resultBox').textContent = results[randomIndex];
+    video.src = videos[randomIndex] + "?t=" + new Date().getTime(); // cache-bust trick
+
+    // Try unmute automatically after 3s
+    setTimeout(() => {
+      video.muted = false;
+      video.volume = 1.0;
+      video.play().catch(() => {
+        unmuteBtn.classList.remove('hidden');
+      });
+    }, 3000);
+
+    // Tap to unmute
+    unmuteBtn.addEventListener('click', () => {
+      video.muted = false;
+      video.volume = 1.0;
+      video.play();
+      unmuteBtn.classList.add('hidden');
+    });
+  </script>
+
+</body>
+</html>

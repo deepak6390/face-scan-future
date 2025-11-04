@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Face Scanner</title>
+  <link href="style.css" rel="stylesheet">
+</head>
+<body class="bg-gray-900 text-white flex flex-col items-center justify-center h-screen">
+
+  <div class="text-center">
+    <h1 class="text-3xl font-bold mb-6">📸 Face Scanner</h1>
+    <p class="mb-4 text-gray-400">Align your face in the camera frame</p>
+
+    <!-- Camera Preview -->
+    <div class="relative w-64 h-64 bg-black rounded-xl overflow-hidden border-2 border-green-400 shadow-lg">
+      <video id="camera" autoplay playsinline class="w-full h-full object-cover"></video>
+      <div id="scanLine" class="absolute top-0 left-0 w-full h-1 bg-green-400 opacity-70"></div>
+    </div>
+
+    <button id="startBtn" class="mt-6 bg-green-500 hover:bg-green-600 px-6 py-2 rounded-full font-semibold">
+      Start Scan
+    </button>
+
+    <p id="statusText" class="mt-4 text-gray-400"></p>
+  </div>
+
+  <script>
+    const video = document.getElementById('camera');
+    const scanLine = document.getElementById('scanLine');
+    const startBtn = document.getElementById('startBtn');
+    const statusText = document.getElementById('statusText');
+
+    // Start camera
+    async function startCamera() {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+        video.srcObject = stream;
+      } catch (err) {
+        alert("Camera access denied or not available!");
+      }
+    }
+
+    startCamera();
+
+    // Scan animation + redirect
+    startBtn.addEventListener('click', () => {
+      startBtn.disabled = true;
+      statusText.textContent = "🔍 Scanning your face...";
+      
+      // Move scan line up & down
+      scanLine.animate(
+        [
+          { transform: "translateY(0)" },
+          { transform: "translateY(250px)" },
+          { transform: "translateY(0)" }
+        ],
+        { duration: 3000, iterations: 1 }
+      );
+
+      // Redirect after 3s
+      setTimeout(() => {
+        window.location.href = 'result.html';
+      }, 3000);
+    });
+  </script>
+</body>
+</html>
